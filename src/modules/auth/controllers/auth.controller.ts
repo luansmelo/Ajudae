@@ -4,10 +4,10 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagg
 import { RevokeSessionUseCase } from '../usecases/revoke-session.usecase';
 import { LoginUseCase } from '../usecases/login-usecase';
 import { RefreshTokenUseCase } from '../usecases/refresh-token-usecase';
-import { LoginDTO } from '../../../modules/dtos/login.dto';
+import { LoginDTO } from '../dtos/login.dto';
 import { JwtGuard } from '../guards/jwt.guard';
-import { LoginResponseDTO } from 'src/modules/dtos/login.response.dto';
-import { RevokeResponseDTO } from 'src/modules/dtos/revoke.dtto';
+import { LoginResponseDTO } from 'src/modules/auth/dtos/login.response.dto';
+import { RevokeResponseDTO } from 'src/modules/auth/dtos/revoke.dtto';
 
 /**
  * Controller responsável por gerenciar autenticação e sessões de usuários.

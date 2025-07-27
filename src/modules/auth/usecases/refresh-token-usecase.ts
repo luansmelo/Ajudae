@@ -4,7 +4,7 @@ import { UserRepository } from '../../../core/domain/repositories/user.repositor
 import { Session } from '../../../core/domain/entities/session.entity';
 import { REPOSITORY_TOKENS } from '../../../shared/utils/tokens';
 import { AuthService } from '../services/auth.service';
-import { LoginResponseDTO } from '../../../modules/dtos/login.response.dto';
+import { LoginResponseDTO } from '../dtos/login.response.dto';
 import { ONE_WEEK_IN_MS } from '../constants/constants';
 import { PinoLogger } from '../../../core/common/logger/logger.service';
 

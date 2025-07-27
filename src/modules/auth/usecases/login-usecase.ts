@@ -3,12 +3,12 @@ import { AuthService } from '../services/auth.service';
 import { SessionRepository } from 'src/core/domain/repositories/session.repository';
 import { REPOSITORY_TOKENS, SERVICE_TOKENS } from 'src/shared/utils/tokens';
 import { Session } from 'src/core/domain/entities/session.entity';
-import { LoginDTO } from 'src/modules/dtos/login.dto';
+import { LoginDTO } from 'src/modules/auth/dtos/login.dto';
 import { ONE_WEEK_IN_MS } from '../constants/constants';
 import { UserRepository } from 'src/core/domain/repositories/user.repository';
 import { PasswordEncryptor } from 'src/core/domain/interfaces/password-encryptor.interface';
 import { PinoLogger } from 'src/core/common/logger/logger.service';
-import { LoginResponseDTO } from 'src/modules/dtos/login.response.dto';
+import { LoginResponseDTO } from 'src/modules/auth/dtos/login.response.dto';
 
 /**
  * Caso de uso responsável pelo login do usuário.
