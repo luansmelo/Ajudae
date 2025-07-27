@@ -1,12 +1,16 @@
 import { HttpStatus } from '@nestjs/common'
 import { DomainException } from './domain-exception'
 
-export class UserNotFoundExpection extends Error implements DomainException {
+export class UserNotFoundException extends Error implements DomainException {
   readonly code = 'USER_NOT_FOUND'
   readonly status = HttpStatus.CONFLICT
+  readonly details?: any
 
-  constructor() {
+  constructor(details?: any) {
     super(`O usuário não foi encontrado`)
-    this.name = 'UserNotFound'
+    this.name = 'UserNotFoundException'
+    if (details) {
+      this.details = details
+    }
   }
 }

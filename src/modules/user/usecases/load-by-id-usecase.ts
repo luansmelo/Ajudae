@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { PinoLogger } from '../../../core/common/logger/logger.service'
-import { UserNotFoundExpection } from '../../../core/domain/erros/user-not-found.exception'
+import { UserNotFoundException } from '../../../core/domain/erros/user-not-found.exception'
 import { UserRepository } from '../../../core/domain/repositories/user.repository'
 import { createSingleResponse } from '../../../shared/utils/response.utils'
 import { REPOSITORY_TOKENS } from '../../../shared/utils/tokens'
@@ -40,7 +40,7 @@ export class LoadUserByIdUseCase {
       LoadUserByIdUseCase.name,
     )
 
-    if (!user) throw new UserNotFoundExpection()
+    if (!user) throw new UserNotFoundException()
 
     this.logger.log(
       `Usuário carregado com sucesso: ${user.email}`,
