@@ -28,6 +28,7 @@ The system includes the following API routes:
 - `POST /auth/login`: Authenticates a user and returns a session token.
 - `POST /auth/refresh`: Refreshes the session token.
 - `POST /auth/logout`: Revokes the session token.
+- `POST /auth/logout/all`: Revokes all sessions token
 
 ### User Routes
 
