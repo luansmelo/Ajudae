@@ -3,7 +3,7 @@ import { UserRepository } from 'src/core/domain/repositories/user.repository'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import { randomBytes } from 'crypto'
-import { REPOSITORY_TOKENS } from 'src/shared/utils/tokens'
+import { REPOSITORY_TOKENS } from 'src/shared/tokens'
 
 @Injectable()
 export class AuthService {

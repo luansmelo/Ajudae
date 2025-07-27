@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport'
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { SessionRepository } from 'src/core/domain/repositories/session.repository'
-import { REPOSITORY_TOKENS } from 'src/shared/utils/tokens'
+import { REPOSITORY_TOKENS } from 'src/shared/tokens'
 
 interface JwtPayload {
   sub: number

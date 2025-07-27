@@ -1,7 +1,7 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common'
 import { AuthService } from '../services/auth.service'
 import { SessionRepository } from 'src/core/domain/repositories/session.repository'
-import { REPOSITORY_TOKENS, SERVICE_TOKENS } from 'src/shared/utils/tokens'
+import { REPOSITORY_TOKENS, SERVICE_TOKENS } from 'src/shared/tokens'
 import { Session } from 'src/core/domain/entities/session.entity'
 import { LoginDTO } from 'src/modules/auth/dtos/login.dto'
 import { ONE_WEEK_IN_MS } from '../constants/constants'

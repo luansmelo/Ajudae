@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { AddUserUseCase } from './usecases/add-user-usecase'
 import { UserController } from './controllers/user.controller'
-import { REPOSITORY_TOKENS, SERVICE_TOKENS } from 'src/shared/utils/tokens'
+import { REPOSITORY_TOKENS, SERVICE_TOKENS } from 'src/shared/tokens'
 import { PrismaUserRepository } from 'src/core/infra/prisma/repositories/user-prisma.repository'
 import { BcryptPasswordEncryptor } from 'src/core/infra/security/bcrypt-password-encryptor'
 import { PrismaService } from 'src/core/infra/prisma/provider/prisma.provider'

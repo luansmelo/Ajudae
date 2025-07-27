@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common'
 import { PinoLogger } from '../../../core/common/logger/logger.service'
 import { UserNotFoundException } from '../../../core/domain/erros/user-not-found.exception'
 import { UserRepository } from '../../../core/domain/repositories/user.repository'
-import { createSingleResponse } from '../../../shared/utils/response.utils'
-import { REPOSITORY_TOKENS } from '../../../shared/utils/tokens'
+import { createSingleResponse } from '../../../core/common/helpers/response.helper'
+import { REPOSITORY_TOKENS } from '../../../shared/tokens'
 
 /**
  * Caso de uso responsável por carregar um usuário pelo ID.

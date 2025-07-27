@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { PinoLogger } from '../../../core/common/logger/logger.service'
 import { SessionRepository } from '../../../core/domain/repositories/session.repository'
-import { REPOSITORY_TOKENS } from '../../../shared/utils/tokens'
+import { REPOSITORY_TOKENS } from '../../../shared/tokens'
 
 /**
  * Caso de uso responsável por revogar sessões e refresh tokens.
