@@ -157,16 +157,16 @@ The system includes the following API routes:
 ### Authentication Routes
 
 - `POST /auth/login`: Authenticates a user and returns a session token.
-- `POST /auth/register`: Registers a new user.
 - `POST /auth/refresh`: Refreshes the session token.
 - `POST /auth/logout`: Revokes the session token.
 
 ### User Routes
 
-- `GET /users`: Retrieves a list of users (admin only).
-- `GET /users/:id`: Retrieves a specific user by ID.
-- `PUT /users/:id`: Updates a user's details.
-- `DELETE /users/:id`: Deletes a user (admin only).
+- `POST /user/register`: Registers a new user.
+- `GET /user`: Retrieves a list of users (admin only).
+- `GET /user/:id`: Retrieves a specific user by ID.
+- `PUT /user/:id`: Updates a user's details.
+- `DELETE /user/:id`: Deletes a user (admin only).
 
 ## Ticket System Workflow
 

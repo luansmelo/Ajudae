@@ -34,7 +34,7 @@ export class UserController {
    * @returns Dados do usuário criado.
    * @throws {EmailAlreadyInUseException} Se o e-mail já estiver cadastrado.
    */
-  @Post('/signup')
+  @Post('/register')
   @ApiOperation({ summary: 'Cria um novo usuário' })
   @ApiResponse({
     status: 201,
