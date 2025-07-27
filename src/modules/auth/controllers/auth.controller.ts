@@ -14,7 +14,6 @@ import { JwtGuard } from '../guards/jwt.guard'
 import { LoginResponseDTO } from 'src/modules/auth/dtos/login.response.dto'
 import { RevokeResponseDTO } from 'src/modules/auth/dtos/revoke.dtto'
 import { JwtRequest } from '../interfaces/auth.interface'
-import { Request } from 'express'
 
 /**
  * Controller responsável por gerenciar autenticação e sessões de usuários.
@@ -51,7 +50,7 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Credenciais inválidas' })
   async login(
     @Body() body: LoginDTO,
-    @Req() req: Request,
+    @Req() req: JwtRequest,
   ): Promise<LoginResponseDTO> {
     const userAgentHeader = req.headers['user-agent']
     const userAgent: string =
