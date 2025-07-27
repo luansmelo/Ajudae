@@ -1,102 +1,218 @@
-<<<<<<< HEAD
-# Ajuda-
-=======
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Ajudaê Project Documentation
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Overview
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Ajudaê is a ticket management system designed to streamline support processes. Users can create tickets targeting specific departments, and administrators can manage and redirect tickets to the appropriate team if needed. The system supports one general administrator and one administrator per support team.
 
-## Description
+### Support Teams
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Marketing
+- Produto
+- Financeiro
+- Other teams (with routes for adding new teams dynamically)
 
-## Project setup
+## System Architecture
 
-```bash
-$ npm install
+The backend is built using Prisma with a PostgreSQL database. Below is the Prisma schema that defines the data models and relationships.
+
+### Prisma Schema
+
+```prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  password  String
+  role      Role      @default(USER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  lastLogin DateTime?
+
+  ticketsCreated  Ticket[]        @relation("TicketsCreated")
+  ticketsAssigned Ticket[]        @relation("TicketsAssigned")
+  messages        TicketMessage[]
+  teams           UserTeam[]
+  session         Session[]
+
+  @@map("user")
+}
+
+model Session {
+  id           Int    @id @default(autoincrement())
+  userId       Int
+  ipAddress    String?
+  userAgent    String?
+  refreshToken String    @unique
+  createdAt    DateTime  @default(now())
+  expiresAt    DateTime
+  revokedAt    DateTime?
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("session")
+}
+
+model Team {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userTeams UserTeam[]
+  tickets   Ticket[]
+
+  @@map("team")
+}
+
+model UserTeam {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  teamId    Int
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  team Team @relation(fields: [teamId], references: [id])
+
+  @@unique([userId, teamId])
+  @@map("user_team")
+}
+
+model Ticket {
+  id        Int            @id @default(autoincrement())
+  title     String
+  status    TicketStatus
+  category  TicketCategory
+  priority  TicketPriority
+  closedAt  DateTime?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  createdById  Int
+  assignedToId Int?
+  teamId       Int?
+
+  createdBy  User            @relation("TicketsCreated", fields: [createdById], references: [id], onDelete: Cascade)
+  assignedTo User?           @relation("TicketsAssigned", fields: [assignedToId], references: [id])
+  team       Team?           @relation(fields: [teamId], references: [id])
+  messages   TicketMessage[]
+
+  @@map("ticket")
+}
+
+model TicketMessage {
+  id            Int      @id @default(autoincrement())
+  ticketId      Int
+  senderId      Int
+  message       String
+  isInternal    Boolean  @default(false)
+  attachmentUrl String?
+  createdAt     DateTime @default(now())
+
+  ticket Ticket @relation(fields: [ticketId], references: [id])
+  sender User   @relation(fields: [senderId], references: [id])
+
+  @@map("ticket_message")
+}
+
+enum Role {
+  ADMIN
+  ATTENDANT
+  USER
+}
+
+enum TicketStatus {
+  Aberto
+  Fechado
+  Em_andamento
+}
+
+enum TicketCategory {
+  Financeiro
+  Marketing
+  Suporte
+  Produto
+  Outro
+}
+
+enum TicketPriority {
+  Baixa
+  Média
+  Alta
+}
 ```
 
-## Compile and run the project
+## Routes
 
-```bash
-# development
-$ npm run start
+The system includes the following API routes:
 
-# watch mode
-$ npm run start:dev
+### Authentication Routes
 
-# production mode
-$ npm run start:prod
+- `POST /auth/login`: Authenticates a user and returns a session token.
+- `POST /auth/register`: Registers a new user.
+- `POST /auth/refresh`: Refreshes the session token.
+- `POST /auth/logout`: Revokes the session token.
+
+### User Routes
+
+- `GET /users`: Retrieves a list of users (admin only).
+- `GET /users/:id`: Retrieves a specific user by ID.
+- `PUT /users/:id`: Updates a user's details.
+- `DELETE /users/:id`: Deletes a user (admin only).
+
+### Team Routes
+
+- `POST /teams`: Creates a new support team (admin only).
+- `GET /teams`: Retrieves a list of all teams.
+- `PUT /teams/:id`: Updates a team's details (admin only).
+- `DELETE /teams/:id`: Deletes a team (admin only).
+
+## Ticket System Workflow
+
+Users can create tickets targeting a specific department (e.g., Marketing, Produto, Financeiro). Each team has one administrator who can:
+
+- Review tickets assigned to their team.
+- Redirect tickets to another team if the category is incorrect.
+- Update ticket status (`Aberto`, `Em_andamento`, `Fechado`) and priority (`Baixa`, `Média`, `Alta`).
+
+The general administrator oversees the entire system and can manage all tickets and teams.
+
+### Workflow Diagram
+
+```mermaid
+graph TD
+    A[User Creates Ticket] -->|Selects Category| B{Ticket Assigned to Team}
+    B -->|Correct Team?| C[Team Administrator Reviews]
+    B -->|Incorrect Team| D[Team Administrator Redirects]
+    D --> E{Ticket Reassigned to Correct Team}
+    C --> F[Process Ticket]
+    E --> F
+    F -->|Update Status| G{Ticket Status: <br> Aberto, Em_andamento, Fechado}
+    G -->|Close Ticket| H[Ticket Closed]
 ```
 
-## Run tests
+## Setup Instructions
 
-```bash
-# unit tests
-$ npm run test
+To run the Ajudaê server, follow these steps:
 
-# e2e tests
-$ npm run test:e2e
+1. **Install Docker**: Ensure Docker is installed on your computer. Download and install it from [Docker's official website](https://www.docker.com/get-started) if not already installed.
+2. **Run the Server**: Execute the following command in the project directory to start the server using Docker Compose:
+   ```bash
+   docker compose up
+   ```
+   This will build and run the necessary containers for the application and database.
+3. **Environment Variables**: Ensure a `.env` file is configured with the `DATABASE_URL` for the PostgreSQL database.
 
-# test coverage
-$ npm run test:cov
-```
+## Next Steps
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
->>>>>>> b24e75d (start project)
+- Implement ticket creation and management routes.
+- Add functionality for administrators to redirect tickets.
+- Enhance the UI for ticket creation and tracking.
