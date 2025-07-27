@@ -1,0 +1,130 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  password  String
+  role      Role      @default(USER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  lastLogin DateTime?
+
+  ticketsCreated  Ticket[]        @relation("TicketsCreated")
+  ticketsAssigned Ticket[]        @relation("TicketsAssigned")
+  messages        TicketMessage[]
+  teams           UserTeam[]
+  session         Session[]
+
+  @@map("user")
+}
+
+model Session {
+  id           Int    @id @default(autoincrement())
+  userId       Int
+  ipAddress    String?
+  userAgent    String?
+  refreshToken String    @unique
+  createdAt    DateTime  @default(now())
+  expiresAt    DateTime
+  revokedAt    DateTime?
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("session")
+}
+
+model Team {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userTeams UserTeam[]
+  tickets   Ticket[]
+
+  @@map("team")
+}
+
+model UserTeam {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  teamId    Int
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  team Team @relation(fields: [teamId], references: [id])
+
+  @@unique([userId, teamId])
+  @@map("user_team")
+}
+
+model Ticket {
+  id        Int            @id @default(autoincrement())
+  title     String
+  status    TicketStatus
+  category  TicketCategory
+  priority  TicketPriority
+  closedAt  DateTime?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  createdById  Int
+  assignedToId Int?
+  teamId       Int?
+
+  createdBy  User            @relation("TicketsCreated", fields: [createdById], references: [id], onDelete: Cascade)
+  assignedTo User?           @relation("TicketsAssigned", fields: [assignedToId], references: [id])
+  team       Team?           @relation(fields: [teamId], references: [id])
+  messages   TicketMessage[]
+
+  @@map("ticket")
+}
+
+model TicketMessage {
+  id            Int      @id @default(autoincrement())
+  ticketId      Int
+  senderId      Int
+  message       String
+  isInternal    Boolean  @default(false)
+  attachmentUrl String?
+  createdAt     DateTime @default(now())
+
+  ticket Ticket @relation(fields: [ticketId], references: [id])
+  sender User   @relation(fields: [senderId], references: [id])
+
+  @@map("ticket_message")
+}
+
+enum Role {
+  ADMIN
+  ATTENDANT
+  USER
+}
+
+enum TicketStatus {
+  Aberto
+  Fechado
+  Em_andamento
+}
+
+enum TicketCategory {
+  Financeiro
+  Marketing
+  Suporte
+  Produto
+  Outro
+}
+
+enum TicketPriority {
+  Baixa
+  Média
+  Alta
+}
