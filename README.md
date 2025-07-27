@@ -1,6 +1,6 @@
 # Ajudaê Project Documentation
 
-![Ajudaê Logo](./assets/logo.png)
+<img src="./assets/logo.png" height="300"/>
 
 ## Overview
 
