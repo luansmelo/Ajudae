@@ -168,13 +168,6 @@ The system includes the following API routes:
 - `PUT /users/:id`: Updates a user's details.
 - `DELETE /users/:id`: Deletes a user (admin only).
 
-### Team Routes
-
-- `POST /teams`: Creates a new support team (admin only).
-- `GET /teams`: Retrieves a list of all teams.
-- `PUT /teams/:id`: Updates a team's details (admin only).
-- `DELETE /teams/:id`: Deletes a team (admin only).
-
 ## Ticket System Workflow
 
 Users can create tickets targeting a specific department (e.g., Marketing, Produto, Financeiro). Each team has one administrator who can:
@@ -210,6 +203,10 @@ To run the Ajudaê server, follow these steps:
    ```
    This will build and run the necessary containers for the application and database.
 3. **Environment Variables**: Ensure a `.env` file is configured with the `DATABASE_URL` for the PostgreSQL database.
+4. **Access Documentation**: Once the application is online, visit the API documentation at:
+   ```
+   http://localhost:3000/docs
+   ```
 
 ## Next Steps
 
