@@ -1,11 +1,11 @@
-import { Module } from '@nestjs/common';
-import { AddUserUseCase } from './usecases/add-user-usecase';
-import { UserController } from './controllers/user.controller';
-import { REPOSITORY_TOKENS, SERVICE_TOKENS } from 'src/shared/utils/tokens';
-import { PrismaUserRepository } from 'src/core/infra/prisma/repositories/user-prisma.repository';
-import { BcryptPasswordEncryptor } from 'src/core/infra/security/bcrypt-password-encryptor';
-import { PrismaService } from 'src/core/infra/prisma/provider/prisma.provider';
-import { LoadUserByIdUseCase } from './usecases/load-by-id-usecase';
+import { Module } from '@nestjs/common'
+import { AddUserUseCase } from './usecases/add-user-usecase'
+import { UserController } from './controllers/user.controller'
+import { REPOSITORY_TOKENS, SERVICE_TOKENS } from 'src/shared/utils/tokens'
+import { PrismaUserRepository } from 'src/core/infra/prisma/repositories/user-prisma.repository'
+import { BcryptPasswordEncryptor } from 'src/core/infra/security/bcrypt-password-encryptor'
+import { PrismaService } from 'src/core/infra/prisma/provider/prisma.provider'
+import { LoadUserByIdUseCase } from './usecases/load-by-id-usecase'
 
 @Module({
   controllers: [UserController],
@@ -14,15 +14,17 @@ import { LoadUserByIdUseCase } from './usecases/load-by-id-usecase';
     LoadUserByIdUseCase,
     {
       provide: REPOSITORY_TOKENS.USER_REPOSITORY,
-      useClass: PrismaUserRepository
+      useClass: PrismaUserRepository,
     },
     {
       provide: SERVICE_TOKENS.PASSWORD_ENCRYPTOR,
-      useClass: BcryptPasswordEncryptor
+      useClass: BcryptPasswordEncryptor,
     },
-    PrismaService
+    PrismaService,
   ],
-  exports: [AddUserUseCase, LoadUserByIdUseCase,
+  exports: [
+    AddUserUseCase,
+    LoadUserByIdUseCase,
     {
       provide: REPOSITORY_TOKENS.USER_REPOSITORY,
       useClass: PrismaUserRepository,
@@ -30,7 +32,7 @@ import { LoadUserByIdUseCase } from './usecases/load-by-id-usecase';
     {
       provide: SERVICE_TOKENS.PASSWORD_ENCRYPTOR,
       useClass: BcryptPasswordEncryptor,
-    }
-  ]
+    },
+  ],
 })
-export class UserModule { }
+export class UserModule {}

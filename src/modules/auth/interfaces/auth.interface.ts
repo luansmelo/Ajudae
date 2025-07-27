@@ -1,12 +1,7 @@
-export interface JwtPayload {
-    sub: number;
-    email: string;
-    role: string;
-    iat?: number;
-    exp?: number;
-}
+import { Request } from 'express'
 
-export interface JwtResponse {
-    accessToken: string;
-    refreshToken?: string
+export interface JwtRequest extends Request {
+  user: {
+    userId: number
+  }
 }

@@ -1,5 +1,5 @@
 export interface PinoLoggerOptions {
-    level: string;
-    redact: string[];
-    pretty: boolean;
+  level: string
+  redact: string[]
+  pretty: boolean
 }
