@@ -46,7 +46,6 @@ export class PrismaUserRepository
       where: { id: Number(id) },
       data: {
         ...userData,
-        lastLogin: data.lastLogin ? new Date(data.lastLogin) : undefined,
       },
     })
     return UserMapper.toEntity(user)
