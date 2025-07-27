@@ -1,6 +1,8 @@
 # Ajudaê Project Documentation
 
-<img src="./assets/logo.png" height="300"/>
+<div align="center">
+  <img src="./assets/logo.png" height="350" />
+</div>
 
 ## Overview
 
