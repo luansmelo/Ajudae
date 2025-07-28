@@ -27,7 +27,7 @@ model User {
 }
 
 model Session {
-  id           Int    @id @default(autoincrement())
+  id           Int       @id @default(autoincrement())
   userId       Int
   ipAddress    String?
   userAgent    String?
@@ -43,7 +43,7 @@ model Session {
 
 model Team {
   id        Int      @id @default(autoincrement())
-  name      String
+  name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

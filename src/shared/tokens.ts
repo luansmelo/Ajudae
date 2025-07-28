@@ -1,6 +1,7 @@
 export const REPOSITORY_TOKENS = {
   USER_REPOSITORY: Symbol('USER_REPOSITORY'),
   SESSION_REPOSITORY: Symbol('SESSION_REPOSITORY'),
+  TEAM_REPOSITORY: Symbol('TEAM_REPOSITORY'),
 } as const
 
 export type RepositoryToken =
